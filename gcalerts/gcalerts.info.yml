@@ -1,0 +1,4 @@
+name: Gold Coast Alerts
+description: Alerts for the gold coast area populated by external organisations and departments.
+type: module
+core: 8.x

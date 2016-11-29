@@ -1,0 +1,14 @@
+gcalerts.suburbs:
+    path: /suburbs
+    defaults:
+        _controller: '\Drupal\gcalerts\Controller\SuburbsController::getSuburbs'
+        _title: 'Suburbs'
+    requirements:
+        _permission: 'access content'
+gcalerts.weatherwarnings:
+    path: /weatherwarnings
+    defaults:
+        _controller: '\Drupal\gcalerts\Controller\WeatherWarningController::getWeatherWarnings'
+        _title: 'Weather warnings'
+    requirements:
+        _permission: 'access content'
