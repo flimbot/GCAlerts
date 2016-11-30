@@ -12,3 +12,10 @@ gcalerts.weatherwarnings:
         _title: 'Weather warnings'
     requirements:
         _permission: 'access content'
+gcalerts.poweroutages:
+    path: /poweroutages
+    defaults:
+        _controller: '\Drupal\gcalerts\Controller\PowerOutageController::getPowerOutages'
+        _title: 'Power outages'
+    requirements:
+        _permission: 'access content'
