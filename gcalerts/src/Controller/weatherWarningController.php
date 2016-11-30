@@ -10,7 +10,6 @@
 	class WeatherWarningController extends ControllerBase {
 		public function getWeatherWarnings() {
 			$config = \Drupal::config('gcalerts.settings');
-			//$url = "http://www.bom.gov.au/fwo/IDZ00056.warnings_qld.xml";
 			$client = \Drupal::httpClient();
 			$response = $client->get($config->get('weather_source.url'), ['proxy' => $config->get('proxy')]);
 			
@@ -21,5 +20,4 @@
 			return new Response('[]', 200);
 		}
 	}
-	
 	//TODO: Caching

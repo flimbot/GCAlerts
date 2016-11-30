@@ -10,6 +10,10 @@
 	//https://www.drupal.org/docs/8/api/responses/responses-overview
 	class SuburbsController extends ControllerBase {
 		public function getSuburbs() {
+			return new JsonResponse($this->getSuburbsArray(), 200);
+		}
+		
+		public function getSuburbsArray() {
 			$suburbCache = \Drupal::cache()->get('goldcoastsuburbs');
 			
 			if(!$suburbCache) {
@@ -28,19 +32,19 @@
 					'proxy' => $config->get('proxy')
 				]);
 
-				$json = Json::decode($response->getBody());
+				//$json = Json::decode($response->getBody());
 			
 				$suburbArray = array();
 				$json = Json::decode($response->getBody());
 				foreach ($json['result']['records'] as $record) {
-					$suburbArray[] = array_values($record);
+					$suburbArray[] = array_values($record)[0];
 				}
 			
 				\Drupal::cache()->set('goldcoastsuburbs', $suburbArray, $config->get('suburbs_source.cachetime')); // Cached 24 hours
-				return new JsonResponse($suburbArray, 200);
+				return $suburbArray;
 			}
 			else {
-				return new JsonResponse($suburbCache->data, 200);
+				return $suburbCache->data;
 			}
 		}
 	}
