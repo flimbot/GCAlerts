@@ -17,7 +17,9 @@
 			if($rssObj->entries) {
 				return new JsonResponse($rssObj->entries, 200);
 			}
-			return new Response('[]', 200);
+			else {
+				return new Response('[]', 200);
+			}
 		}
 	}
 	//TODO: Caching
