@@ -17,18 +17,37 @@ class PowerOutages {
 
 	public function getUnplannedOutages() {	
 		// Need to wait for a legitimate outage to see results
-		//$unplannedoutages = $this->getEnergexSearchResults($this->config->get('energex_unplanned_outage_source.url'));
-		return array();
+		$unplannedoutages = $this->getEnergexSearchResults($this->config->get('energex_unplanned_outage_source.url'));
+		$region = $this->config->get('energex_unplanned_outage_source.region');
+		foreach($unplannedoutages as $result) {
+			if($result['metaData'] && $result['metaData']['L'] && $result['metaData']['L'] = $region) {
+				$outage = array();
+				
+				$outage['start'] = $result['metaData']['d'];
+				#$outage['end'] = $result['metaData']['E'];
+				#$outage['street'] = $result['metaData']['t'];
+				$outage['suburb'] = $result['metaData']['suburb'];
+				$outage['updated'] = $result['metaData']['updated'];
+				$outage['status'] = $result['metaData']['t'];
+
+				preg_match("/(\d{4})/", $result['metaData']['keys'], $matches);
+				$outage['postcode'] = $matches[0];
+
+				// TODO: Also 'Status' which contains 'Completed' 'Cancelled'
+				
+				$outages[] = $outage;
+			}
+		}
+
+		return $outages;
 	}
 
 	public function getPlannedOutages() {		
 		$suburbs = (new \Drupal\gcalerts\Utilities\Suburbs())->getSuburbArrayCached(); 
-
-		//This call should iterate/page and return whole result set. Could be improved by passing a comparison function to compare suburbs (for example) while paging
 		$plannedoutages = $this->getEnergexSearchResults($this->config->get('energex_planned_outage_source.url'));
 
 		foreach($plannedoutages as $result) {
-			if(in_array($result['metaData']['suburb'], $suburbs)) {
+			if($result['metaData'] && $result['metaData']['suburb'] && in_array($result['metaData']['suburb'], $suburbs)) {
 				$outage = array();
 				
 				$outage['start'] = $result['metaData']['d'];
@@ -36,12 +55,14 @@ class PowerOutages {
 				$outage['street'] = $result['metaData']['t'];
 				$outage['suburb'] = $result['metaData']['suburb'];
 				$outage['updated'] = $result['metaData']['updated'];
+				$outage['status'] = $result['metaData']['X'];
+
 				preg_match("/(\d{4})/", $result['metaData']['keys'], $matches);
 				$outage['postcode'] = $matches[0];
 
 				// TODO: Also 'Status' which contains 'Completed' 'Cancelled'
 				
-				$outages['planned'][] = $outage;
+				$outages[] = $outage;
 			}
 		}
 		
@@ -49,14 +70,20 @@ class PowerOutages {
 	}
 	
 	//Generic reader for Funnelback search results
-	protected function getEnergexSearchResults($url) {
-		//TODO: (important) Paging on this!
-		
+	//This call will iterate/page and return whole result set. Could be improved by passing a comparison function to compare suburbs (for example) while paging
+	protected function getEnergexSearchResults($url) {		
 		$http = new \Drupal\gcalerts\Utilities\Http();
+		$results = array();
+		$startRank = 1;
+		do {
+			if($jsonResp) {
+				$startRank = $jsonResp['response']['resultPacket']['resultsSummary']['nextStart'];
+			}
 
-		$outages = array();
-		$jsonResp = Json::decode($http->get($url));
-		return $jsonResp['response']['resultPacket']['results'];
+			$jsonResp = Json::decode($http->get($url . $startRank));
+			$results += $jsonResp['response']['resultPacket']['results'];
+		} while($jsonResp['response']['resultPacket']['resultsSummary']['nextStart']);
+		return $results;
 	}
 
 	public function getPowerOutagesCached() {

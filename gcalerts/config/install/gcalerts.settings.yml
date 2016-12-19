@@ -12,8 +12,11 @@ traffic:
   url: 'https://data.qldtraffic.qld.gov.au/events.geojson'
   cachetime: 900
 energex_planned_outage_source:
-  url: 'https://www.energex.com.au/fb-search/test-proxies/search.json-proxy/_nocache?sort=metaL&num_ranks=1000&collection=energex-maintenance-outages-v2&query=!null&start_rank=1'
+  #Appending the start rank value for now, so ensure it ends with start_rank=
+  url: 'https://www.energex.com.au/fb-search/test-proxies/search.json-proxy/_nocache?sort=metaL&num_ranks=1000&collection=energex-maintenance-outages-v2&query=!null&start_rank='
   cachetime: 900
 energex_unplanned_outage_source:
-  url: 'https://www.energex.com.au/fb-search/test-proxies/search.json-proxy/_nocache?sort=metaL&num_ranks=1000&collection=energex-outages-v2&query=!null&start_rank=1'
+  #Appending the start rank value for now, so ensure it ends with start_rank=
+  region: 'Brisbane City'
+  url: 'https://www.energex.com.au/fb-search/test-proxies/search.json-proxy/_nocache?sort=metaL&num_ranks=1000&collection=energex-outages-v2&query=!null&start_rank='
   cachetime: 900
