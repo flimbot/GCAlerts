@@ -1,0 +1,23 @@
+# Using Fiddler to auth with proxy http://stackoverflow.com/questions/37730040/how-to-specify-a-user-id-and-password-for-visual-studio-code-with-an-authenticat
+proxy: 'http://localhost:8888'
+langcode: 'en'
+suburbs:
+  url: 'http://data.gov.au/api/action/datastore_search'
+  resource_id: 'ad3a8b32-c826-4bc4-ba0a-009d38257ea0'
+  # 12 hours
+  cachetime: 43200 
+weather:
+  url: 'http://www.bom.gov.au/fwo/IDZ00056.warnings_qld.xml'
+  cachetime: 900
+traffic:
+  url: 'https://data.qldtraffic.qld.gov.au/events.geojson'
+  cachetime: 900
+energex_planned_outage_source:
+  # Appending the start rank value for now, so ensure it ends with start_rank=
+  url: 'https://www.energex.com.au/fb-search/test-proxies/search.json-proxy/_nocache?sort=metaL&num_ranks=1000&collection=energex-maintenance-outages-v2&query=!null&start_rank='
+  cachetime: 900
+energex_unplanned_outage_source:
+  # Appending the start rank value for now, so ensure it ends with start_rank=
+  region: 'Brisbane City'
+  url: 'https://www.energex.com.au/fb-search/test-proxies/search.json-proxy/_nocache?sort=metaL&num_ranks=1000&collection=energex-outages-v2&query=!null&start_rank='
+  cachetime: 900
